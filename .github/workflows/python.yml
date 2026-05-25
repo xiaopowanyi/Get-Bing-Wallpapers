@@ -19,7 +19,7 @@ jobs:
       with:
         python-version: '3.13'
         cache: 'pip'
-        cache-dependency-path: GetBingPic/requirements.txt
+        cache-dependency-path: requirements.txt
 
     - name: Checkout Image Repository (Blobless & Sparse)
       env:
@@ -39,7 +39,7 @@ jobs:
     - name: Install Dependencies
       run: |
          python -m pip install --upgrade pip
-         if [ -f GetBingPic/requirements.txt ]; then pip install -r GetBingPic/requirements.txt; fi
+         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
     - name: Execute Python Script (Fetch, Store, Notify)
       env:
@@ -50,7 +50,6 @@ jobs:
         BARK_URL: ${{ secrets.BARK_URL }}
         BARK_KEY: ${{ secrets.BARK_KEY }}
       run: |
-         cd GetBingPic
          python getbingpic.py
 
     - name: Commit and Push Images
