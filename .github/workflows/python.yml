@@ -1,0 +1,73 @@
+name: Python CI
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 2 * * *'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code Repository
+      uses: actions/checkout@v4.1.7
+
+    - name: Set up Python 3.13
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+        cache: 'pip'
+        cache-dependency-path: GetBingPic/requirements.txt
+
+    - name: Checkout Image Repository (Blobless & Sparse)
+      env:
+        TARGET_REPO: ${{ secrets.WALLPAPER_REPO }}
+        TARGET_TOKEN: ${{ secrets.TARGET_REPO_TOKEN }}
+      run: |
+        mkdir output_data
+        cd output_data
+        git init
+        git remote add origin https://x-access-token:${TARGET_TOKEN}@github.com/${TARGET_REPO}.git
+        # Enable sparse-checkout and blobless clone
+        git config core.sparseCheckout true
+        echo "README.md" > .git/info/sparse-checkout
+        git fetch --filter=blob:none origin main
+        git checkout main
+
+    - name: Install Dependencies
+      run: |
+         python -m pip install --upgrade pip
+         if [ -f GetBingPic/requirements.txt ]; then pip install -r GetBingPic/requirements.txt; fi
+
+    - name: Execute Python Script (Fetch, Store, Notify)
+      env:
+        OUTPUT_DIR: ${{ github.workspace }}/output_data
+        WALLPAPER_REPO: ${{ secrets.WALLPAPER_REPO }}
+        GITHUB_TOKEN: ${{ secrets.TARGET_REPO_TOKEN }}
+        PUSH_TYPE: ${{ secrets.PUSH_TYPE }}
+        BARK_URL: ${{ secrets.BARK_URL }}
+        BARK_KEY: ${{ secrets.BARK_KEY }}
+      run: |
+         cd GetBingPic
+         python getbingpic.py
+
+    - name: Commit and Push Images
+      run: |
+         cd output_data
+         git config --local user.email "action@github.com"
+         git config --local user.name "GitHub Action"
+         # Add new files
+         git add --sparse Basics/ || true
+         git add --sparse "Add Exif/" || true
+         git add README.md || true
+         
+         # Only commit if there are changes
+         if ! git diff --staged --quiet; then
+             git commit -m "Auto add new Bing wallpapers [skip ci]"
+             git pull --rebase origin main || true
+             git push origin main || (sleep 5 && git pull --rebase origin main && git push origin main)
+         else
+             echo "No new images to commit."
+         fi

@@ -1,0 +1,4 @@
+parsel
+piexif
+Pillow
+requests
