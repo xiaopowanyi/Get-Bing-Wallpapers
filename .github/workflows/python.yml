@@ -58,8 +58,8 @@ jobs:
     - name: Commit and Push Images
       run: |
          cd output_data
-         git config --local user.email "${{ secrets.GIT_USER_EMAIL || '1141101853@qq.com' }}"
-         git config --local user.name "${{ secrets.GIT_USER_NAME || 'xiaopowanyi' }}"
+         git config --local user.email "github-actions[bot]@users.noreply.github.com"
+         git config --local user.name "github-actions[bot]"
          # Add new files
          git add --sparse Basics/ || true
          git add --sparse "Add Exif/" || true

@@ -57,8 +57,6 @@ python getbingpic.py --output-dir ./my_wall  # 指定保存目录
 |---|---|---|
 | `WALLPAPER_REPO` | 壁纸存储仓库，格式 `owner/repo` | 是 |
 | `TARGET_REPO_TOKEN` | 目标仓库的 Personal Access Token | 是 |
-| `GIT_USER_NAME` | 提交到壁纸仓库的作者名称（默认 `xiaopowanyi`） | 否 |
-| `GIT_USER_EMAIL` | 提交到壁纸仓库的作者邮箱（默认 `1141101853@qq.com`） | 否 |
 | `PUSH_TYPE` | 推送渠道，目前支持 `bark` | 否 |
 | `BARK_URL` | Bark 服务地址 | 否 |
 | `BARK_KEY` | Bark 设备 Key | 否 |
