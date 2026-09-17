@@ -35,10 +35,17 @@ pip install -r requirements.txt
 2. 运行脚本：
 
 ```bash
+# 默认获取今日中国区壁纸
 python getbingpic.py
+
+# 常用命令行选项
+python getbingpic.py --dry-run               # 仅模拟检测，不下载不推送
+python getbingpic.py --market en-US          # 获取指定地区（如美区）壁纸
+python getbingpic.py --idx 1                 # 获取昨日壁纸（0-7）
+python getbingpic.py --output-dir ./my_wall  # 指定保存目录
 ```
 
-图片默认保存在当前目录下的 `Basics/` 和 `Add Exif/` 文件夹中，按 `年/月` 归档。
+图片默认保存在当前目录下的 `Basics/` 和 `Add Exif/` 文件夹中，按 `年/月` 归档。EXIF 元数据采用无损段注入，保持 100% 原始超清画质。
 
 ### GitHub Actions 自动运行
 
@@ -50,6 +57,8 @@ python getbingpic.py
 |---|---|---|
 | `WALLPAPER_REPO` | 壁纸存储仓库，格式 `owner/repo` | 是 |
 | `TARGET_REPO_TOKEN` | 目标仓库的 Personal Access Token | 是 |
+| `GIT_USER_NAME` | 提交到壁纸仓库的作者名称（默认 `xiaopowanyi`） | 否 |
+| `GIT_USER_EMAIL` | 提交到壁纸仓库的作者邮箱（默认 `1141101853@qq.com`） | 否 |
 | `PUSH_TYPE` | 推送渠道，目前支持 `bark` | 否 |
 | `BARK_URL` | Bark 服务地址 | 否 |
 | `BARK_KEY` | Bark 设备 Key | 否 |

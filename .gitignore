@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDE / Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local data & wallpaper outputs
+output_data/
+Basics/
+Add Exif/
+temp_test/
+*.tmp
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+Desktop.ini
