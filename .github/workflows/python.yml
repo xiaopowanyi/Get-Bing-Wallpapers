@@ -9,6 +9,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
 
     steps:
     - name: Checkout Code Repository
@@ -70,3 +73,9 @@ jobs:
          else
              echo "No new images to commit."
          fi
+
+    - name: Keep Workflow Active
+      uses: gautamkrishnar/keepalive-workflow@v2
+      if: always()
+      with:
+        use_api: true
