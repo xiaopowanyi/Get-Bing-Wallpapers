@@ -72,3 +72,20 @@ jobs:
          else
              echo "No new images to commit."
          fi
+
+    - name: Check and Keep Repository Active
+      run: |
+        # 检查代码仓库距离最后一次提交的天数，若超过 45 天无活动则自动创建空提交保活
+        LAST_COMMIT=$(git log -1 --format=%ct)
+        NOW=$(date +%s)
+        DAYS_DIFF=$(( (NOW - LAST_COMMIT) / 86400 ))
+        echo "代码仓库距离上次提交已过去 $DAYS_DIFF 天"
+        if [ $DAYS_DIFF -ge 45 ]; then
+          echo "代码仓库超过 45 天无新提交，自动生成保活提交以重置 60 天倒计时..."
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty -m "chore: keep repository active [skip ci]"
+          git push origin main
+        else
+          echo "代码仓库处于活跃期，无需保活提交。"
+        fi
